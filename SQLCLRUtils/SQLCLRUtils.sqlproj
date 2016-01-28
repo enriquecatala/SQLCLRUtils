@@ -83,6 +83,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="clr\SqlContains.cs" />
     <Compile Include="clr\SqlRegex.cs" />
+    <Compile Include="clr\TreeAndFourPartNameDetector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Functions\fn_Nums.sql" />
