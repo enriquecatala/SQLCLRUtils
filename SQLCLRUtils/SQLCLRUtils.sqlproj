@@ -73,7 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clr\CONCAT_AGG.cs" />
+    <Compile Include="clr\CONCAT_AGG_Optimized.cs" />
     <Compile Include="clr\AssemblyExporter.cs" />
     <Compile Include="clr\Bucle_NonYield.cs" />
     <Compile Include="clr\Bucle_Preemtive.cs" />
@@ -84,6 +84,7 @@
     <Compile Include="clr\SqlContains.cs" />
     <Compile Include="clr\SqlRegex.cs" />
     <Compile Include="clr\TreeAndFourPartNameDetector.cs" />
+    <Compile Include="clr\CONCAT_AGG.cs" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Functions\fn_Nums.sql" />
@@ -104,5 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Queries\Test SqlRegex.sql" />
+    <None Include="SQLCLRUtils.publish.xml" />
   </ItemGroup>
 </Project>

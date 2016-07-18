@@ -5,19 +5,15 @@ using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
 using System.Text;
 
-/// <summary>
-/// Enrique Catala Bañuls: UDA optimizado para concatenar clases en SM
-///     Pide como parámetro saber qué clase queremos se pinte primero
-///     la clase es un varchar(10) según el esquema de BBDD
-/// </summary>
 [Serializable]
-[Microsoft.SqlServer.Server.SqlUserDefinedAggregate(Format.UserDefined, IsInvariantToNulls = false,
+[Microsoft.SqlServer.Server.SqlUserDefinedAggregate(Format.UserDefined, 
+    IsInvariantToNulls = true,
     IsInvariantToOrder = false,
     IsInvariantToDuplicates = false,
     IsNullIfEmpty = true,
-    MaxByteSize = 8000,
-    Name = "CONCAT_AGG_Optimized")]
-public struct CONCAT_AGG : IBinarySerialize
+    MaxByteSize = -1,
+    Name = "CONCAT_AGG")]
+public struct CONCAT_AGG: IBinarySerialize
 {
     private StringBuilder resultado;
     public void Init()
@@ -25,33 +21,22 @@ public struct CONCAT_AGG : IBinarySerialize
         // Put your code here
         resultado = new StringBuilder();
     }
-    /// <summary>
-    /// Agregamos valores separados por "/" de forma que si primerValor == true, el valor que entra se debe imprimir el primero en el resultado final
-    /// </summary>
-    /// <param name="Value"></param>
-    /// <param name="primerValor"></param>
-    public void Accumulate([SqlFacet(MaxSize = 10)]SqlChars Value, SqlBoolean primerValor)
-    {
 
+    public void Accumulate(SqlString Value)
+    {
         if (Value.IsNull)
             return;
-
-        if (primerValor)
-        {
-            resultado.Insert(0, '/');
-            resultado.Insert(0, Value.Value);
-        }
-        else
-            resultado.Append(Value.Value).Append('/');
-
+              
+        resultado.Append(Value.Value).Append(';');
     }
 
-    public void Merge(CONCAT_AGG Group)
+    public void Merge (CONCAT_AGG Group)
     {
         resultado.Append(Group.resultado);
+
     }
 
-    public SqlString Terminate()
+    public SqlString Terminate ()
     {
         String salida = String.Empty;
 
@@ -59,7 +44,6 @@ public struct CONCAT_AGG : IBinarySerialize
             salida = resultado.ToString(0, resultado.Length - 1);
         return new SqlString(salida);
     }
-
 
     public void Read(System.IO.BinaryReader r)
     {
