@@ -38,7 +38,7 @@ public struct CONCAT_AGG: IBinarySerialize
 
     public SqlString Terminate ()
     {
-        String salida = String.Empty;
+        String salida = null;
 
         if (resultado != null && resultado.Length > 0)
             salida = resultado.ToString(0, resultado.Length - 1);
