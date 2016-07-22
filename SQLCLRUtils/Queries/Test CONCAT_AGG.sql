@@ -27,12 +27,11 @@ GO
 -- old fashion
 --
 SELECT  STUFF((SELECT   ';' + CONVERT(NVARCHAR(20), a.object_id)
-               FROM     sys.objects a
-                        CROSS JOIN sys.objects
+               FROM     sys.objects a                       
         FOR   XML PATH('') ,
                   TYPE).value('.', 'nvarchar(max)'), 1, 1, '');
 -- new fashion
 --
 SELECT  Aggregates.CONCAT_AGG(a.object_id)
-FROM    sys.objects a
-        CROSS JOIN sys.objects;
+FROM    sys.objects a;
+        

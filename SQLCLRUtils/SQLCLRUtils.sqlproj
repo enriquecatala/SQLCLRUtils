@@ -85,6 +85,7 @@
     <Compile Include="clr\SqlRegex.cs" />
     <Compile Include="clr\TreeAndFourPartNameDetector.cs" />
     <Compile Include="clr\CONCAT_AGG.cs" />
+    <Compile Include="clr\StringSplit.cs" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Functions\fn_Nums.sql" />
@@ -96,6 +97,7 @@
     <None Include="Queries\Queries CLR dmv.sql" />
     <Build Include="dbo\Functions\EsNumeroPar.sql" />
     <Build Include="dbo\Functions\EsNumeroParInline.sql" />
+    <None Include="Queries\Test StringSplit.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
