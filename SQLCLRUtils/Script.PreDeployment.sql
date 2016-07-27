@@ -12,8 +12,8 @@
 -- Solo si no es Azure
 IF(EXISTS ( SELECT 1 FROM (SELECT SERVERPROPERTY('Edition') AS v) x WHERE v <> 'SQL Azure'))
 begin
-EXEC sp_configure 'clr enabled',1;
-RECONFIGURE WITH OVERRIDE;
+	EXEC sp_configure 'clr enabled',1;
+	RECONFIGURE WITH OVERRIDE;
 end
 
 if object_id('aggregates.CONCAT_AGG') is NOT NULL BEGIN

@@ -8,11 +8,12 @@ using System.Collections;
 public partial class UserDefinedFunctions
 {
     [Microsoft.SqlServer.Server.SqlFunction(
-        FillRowMethodName = "FillRow_Multi",
-        TableDefinition = "item nvarchar(4000)"
+        FillRowMethodName = "FillRowNumber",
+        TableDefinition = "item bigint",
+        DataAccess = DataAccessKind.None
         )
      ]
-    public static IEnumerator StringSplit([SqlFacet(MaxSize = -1)]
+    public static IEnumerator StringSplit_Number([SqlFacet(MaxSize = -1)]
       SqlChars Input,
       [SqlFacet(MaxSize = 255)]
       SqlChars Delimiter)
@@ -23,9 +24,32 @@ public partial class UserDefinedFunctions
             new StringSplit_Class(Input.Value, Delimiter.Value));
     }
 
-    public static void FillRow_Multi(object obj, out SqlString item)
+    [Microsoft.SqlServer.Server.SqlFunction(
+    FillRowMethodName = "FillRow",
+    TableDefinition = "item nvarchar(4000)",
+    DataAccess = DataAccessKind.None
+    )
+ ]
+    public static IEnumerator StringSplit_Text(
+        [SqlFacet(MaxSize = -1)]
+        SqlChars Input,
+        [SqlFacet(MaxSize = 255)]
+        SqlChars Delimiter)
+    {
+        return (
+            (Input.IsNull || Delimiter.IsNull) ?
+            new StringSplit_Class(new char[0], new char[0]) :
+            new StringSplit_Class(Input.Value, Delimiter.Value));
+    }
+
+    public static void FillRow(object obj, out SqlString item)
     {
         item = new SqlString((string)obj);
+    }
+
+    public static void FillRowNumber(object obj, out SqlInt64 item)
+    {
+        item = new SqlInt64(long.Parse((string)obj));
     }
 
     public class StringSplit_Class : IEnumerator
