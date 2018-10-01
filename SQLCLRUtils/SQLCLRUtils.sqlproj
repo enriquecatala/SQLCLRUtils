@@ -99,6 +99,7 @@
     <Build Include="dbo\Functions\EsNumeroParInline.sql" />
     <None Include="Queries\Test StringSplit.sql" />
     <Build Include="dbo\Functions\OldSplitString.sql" />
+    <None Include="Queries\Test TreeAndFourPartNameDetector.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

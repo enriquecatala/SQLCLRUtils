@@ -25,11 +25,19 @@ internal class GroupNode
     private string _value;
     public string Value { get { return _value; } }
 
-    public GroupNode(int index, string group, string value)
+    private string _instanceName;
+    public string InstanceName { get { return _instanceName; } }
+
+    private string _databaseName;
+        public string DatabaseName { get { return _databaseName; } }
+
+    public GroupNode(int index, string group, string value, string instance_name, string database_name)
     {
         _index = index;
         _name = group;
         _value = value;
+        _instanceName = instance_name;
+        _databaseName = database_name;
     }
 };
 
@@ -69,8 +77,20 @@ internal class GroupIterator : IEnumerable
                     Group group = current.Groups[name];
                     if (group.Success)
                     {
+                        string instanceName = string.Empty;
+                        string databaseName = String.Empty;
+                        if (name == "fourPart")
+                        {
+                            int firstDotPossition = group.Value.IndexOf('.');
+                            instanceName = group.Value.Substring(0, firstDotPossition);
+                            databaseName = group.Value.Substring(firstDotPossition+1, group.Value.IndexOf('.',firstDotPossition)-2);
+                        }
+                        else if (name == "treePart")
+                        {
+                            databaseName = group.Value.Substring(0, group.Value.IndexOf('.'));
+                        }
                         yield return new GroupNode(
-                            index, name, group.Value);
+                            index, name, group.Value, instanceName, databaseName);
                     }
                 }
             }
@@ -85,7 +105,7 @@ public partial class UserDefinedFunctions
 
 
     [SqlFunction(FillRowMethodName = "FillGroupRow", TableDefinition =
-    "[Index] int,[Group] nvarchar(max),[Text] nvarchar(max)")]
+    "[Index] int,[Group] nvarchar(max),[Text] nvarchar(max),[ReferencedInstanceName] nvarchar(max), [ReferencedDatabaseName] nvarchar(max)")]
     public static IEnumerable TreeAndFourPartNameDetector(SqlChars input)
     {
         return new GroupIterator(new string(input.Value));
@@ -93,12 +113,14 @@ public partial class UserDefinedFunctions
 
     [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters")]
     public static void FillGroupRow(object data,
-        out SqlInt32 index, out SqlChars group, out SqlChars text)
+        out SqlInt32 index, out SqlChars group, out SqlChars text,out SqlChars instanceName, out SqlChars databaseName)
     {
         GroupNode node = (GroupNode)data;
         index = new SqlInt32(node.Index);
         group = new SqlChars(node.Name.ToCharArray());
         text = new SqlChars(node.Value.ToCharArray());
+        instanceName = new SqlChars(node.InstanceName.ToCharArray());
+        databaseName = new SqlChars(node.DatabaseName.ToCharArray());
     }
 
 };
