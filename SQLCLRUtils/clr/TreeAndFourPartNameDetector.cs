@@ -82,8 +82,10 @@ internal class GroupIterator : IEnumerable
                         if (name == "fourPart")
                         {
                             int firstDotPossition = group.Value.IndexOf('.');
+                            int secondDotPossition = group.Value.IndexOf('.',firstDotPossition+1);
                             instanceName = group.Value.Substring(0, firstDotPossition);
-                            databaseName = group.Value.Substring(firstDotPossition+1, group.Value.IndexOf('.',firstDotPossition)-2);
+                            databaseName = group.Value.Substring(firstDotPossition+1,secondDotPossition-firstDotPossition-1);
+                           
                         }
                         else if (name == "treePart")
                         {
